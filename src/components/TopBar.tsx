@@ -1,7 +1,7 @@
 import { ChangeEvent, KeyboardEvent } from 'react'
 import styles from './TopBar.module.css'
 import { Category } from '../types'
-import { CATEGORY_LABELS, CATEGORY_ICONS } from '../utils'
+import { CATEGORY_COLORS, CATEGORY_LABELS, CATEGORY_ICONS } from '../utils'
 
 export type SaveTarget = 'auto' | Category
 
@@ -51,16 +51,21 @@ export function TopBar({ query, saveTarget, onQuery, onSearch, onSaveTarget }: P
       <div className={styles.saveRow}>
         <span className={styles.saveLabel}>保存先:</span>
         <div className={styles.saveTargets}>
-          {SAVE_TARGETS.map((t) => (
-            <button
-              key={t.id}
-              className={`${styles.targetBtn} ${saveTarget === t.id ? styles.targetActive : ''}`}
-              onClick={() => onSaveTarget(t.id)}
-            >
-              <span>{t.icon}</span>
-              <span>{t.label}</span>
-            </button>
-          ))}
+          {SAVE_TARGETS.map((t) => {
+            const isActive = saveTarget === t.id
+            const color = t.id !== 'auto' ? CATEGORY_COLORS[t.id as Category] : null
+            return (
+              <button
+                key={t.id}
+                className={`${styles.targetBtn} ${isActive ? styles.targetActive : ''}`}
+                style={isActive && color ? { background: color.bg, color: color.text, borderColor: color.border } : {}}
+                onClick={() => onSaveTarget(t.id)}
+              >
+                <span>{t.icon}</span>
+                <span>{t.label}</span>
+              </button>
+            )
+          })}
         </div>
       </div>
     </div>

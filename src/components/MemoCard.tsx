@@ -1,6 +1,6 @@
 import { KeyboardEvent, useEffect, useRef, useState } from 'react'
 import { Category, Memo } from '../types'
-import { CATEGORY_ICONS, CATEGORY_LABELS } from '../utils'
+import { CATEGORY_COLORS, CATEGORY_ICONS, CATEGORY_LABELS } from '../utils'
 import styles from './MemoCard.module.css'
 
 interface Props {
@@ -65,8 +65,13 @@ export function MemoCard({ memo, onUpdate, onToggleImportant, onTogglePin, onDel
     minute: '2-digit',
   })
 
+  const color = CATEGORY_COLORS[editing ? draftCategory : memo.category]
+
   return (
-    <article className={`${styles.card} ${editing ? styles.editingCard : ''}`}>
+    <article
+      className={`${styles.card} ${editing ? styles.editingCard : ''}`}
+      style={{ borderLeftColor: color.border, borderLeftWidth: 4 }}
+    >
       <div className={styles.body}>
         {editing ? (
           <>
@@ -79,24 +84,32 @@ export function MemoCard({ memo, onUpdate, onToggleImportant, onTogglePin, onDel
               rows={4}
             />
             <div className={styles.categorySelector}>
-              {CATEGORIES.map((cat) => (
-                <button
-                  key={cat}
-                  className={`${styles.catBtn} ${draftCategory === cat ? styles.catBtnActive : ''}`}
-                  onClick={() => setDraftCategory(cat)}
-                  type="button"
-                >
-                  <span>{CATEGORY_ICONS[cat]}</span>
-                  <span>{CATEGORY_LABELS[cat]}</span>
-                </button>
-              ))}
+              {CATEGORIES.map((cat) => {
+                const c = CATEGORY_COLORS[cat]
+                const isActive = draftCategory === cat
+                return (
+                  <button
+                    key={cat}
+                    className={`${styles.catBtn} ${isActive ? styles.catBtnActive : ''}`}
+                    style={isActive ? { background: c.bg, color: c.text, borderColor: c.border } : {}}
+                    onClick={() => setDraftCategory(cat)}
+                    type="button"
+                  >
+                    <span>{CATEGORY_ICONS[cat]}</span>
+                    <span>{CATEGORY_LABELS[cat]}</span>
+                  </button>
+                )
+              })}
             </div>
           </>
         ) : (
           <p className={styles.content}>{memo.content}</p>
         )}
         <div className={styles.footer}>
-          <span className={`${styles.category} ${editing ? styles.categoryEditing : ''}`}>
+          <span
+            className={`${styles.category} ${editing ? styles.categoryEditing : ''}`}
+            style={{ background: color.bg, color: color.text, borderColor: color.border }}
+          >
             {editing ? CATEGORY_LABELS[draftCategory] : CATEGORY_LABELS[memo.category]}
           </span>
           <span className={styles.date}>{date}</span>

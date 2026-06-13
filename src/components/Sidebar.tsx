@@ -1,6 +1,6 @@
 import styles from './Sidebar.module.css'
 import { Category } from '../types'
-import { CATEGORY_LABELS, CATEGORY_ICONS } from '../utils'
+import { CATEGORY_COLORS, CATEGORY_LABELS, CATEGORY_ICONS } from '../utils'
 
 export type Folder = 'all' | 'important' | 'pinned' | Category
 
@@ -30,6 +30,7 @@ export function Sidebar({ selected, counts, onSelect }: Props) {
             selected={selected}
             count={counts[cat]}
             onSelect={onSelect}
+            color={CATEGORY_COLORS[cat]}
           />
         ))}
       </nav>
@@ -45,18 +46,29 @@ interface ItemProps {
   count: number
   onSelect: (f: Folder) => void
   orange?: boolean
+  color?: { bg: string; text: string; border: string }
 }
 
-function FolderItem({ id, label, icon, selected, count, onSelect, orange }: ItemProps) {
+function FolderItem({ id, label, icon, selected, count, onSelect, orange, color }: ItemProps) {
   const isActive = selected === id
   return (
     <button
       className={`${styles.item} ${isActive ? styles.active : ''}`}
+      style={
+        isActive && color
+          ? { background: color.bg, color: color.text, borderLeft: `3px solid ${color.border}` }
+          : color
+          ? { borderLeft: '3px solid transparent' }
+          : {}
+      }
       onClick={() => onSelect(id)}
     >
       <span className={styles.icon}>{icon}</span>
       <span className={styles.itemLabel}>{label}</span>
-      <span className={`${styles.badge} ${orange ? styles.badgeOrange : ''} ${count === 0 ? styles.badgeZero : ''}`}>
+      <span
+        className={`${styles.badge} ${orange ? styles.badgeOrange : ''} ${count === 0 ? styles.badgeZero : ''}`}
+        style={isActive && color ? { background: color.border, color: color.text } : {}}
+      >
         {count}
       </span>
     </button>

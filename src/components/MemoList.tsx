@@ -1,17 +1,19 @@
 import { useRef } from 'react'
-import { Category, Memo } from '../types'
+import { CategoryDef, Memo } from '../types'
 import { MemoCard } from './MemoCard'
 import styles from './MemoList.module.css'
 
 interface Props {
   memos: Memo[]
-  onUpdate: (id: string, content: string, category: Category) => void
+  categories: CategoryDef[]
+  getCategoryDef: (id: string) => CategoryDef
+  onUpdate: (id: string, content: string, category: string) => void
   onToggleImportant: (id: string) => void
   onTogglePin: (id: string) => void
   onDelete: (id: string) => void
 }
 
-export function MemoList({ memos, onUpdate, onToggleImportant, onTogglePin, onDelete }: Props) {
+export function MemoList({ memos, categories, getCategoryDef, onUpdate, onToggleImportant, onTogglePin, onDelete }: Props) {
   const bottomRef = useRef<HTMLDivElement>(null)
 
   const scrollToBottom = () => {
@@ -31,6 +33,8 @@ export function MemoList({ memos, onUpdate, onToggleImportant, onTogglePin, onDe
             <MemoCard
               key={m.id}
               memo={m}
+              categories={categories}
+              getCategoryDef={getCategoryDef}
               onUpdate={(content, category) => onUpdate(m.id, content, category)}
               onToggleImportant={() => onToggleImportant(m.id)}
               onTogglePin={() => onTogglePin(m.id)}
@@ -41,9 +45,7 @@ export function MemoList({ memos, onUpdate, onToggleImportant, onTogglePin, onDe
         <div ref={bottomRef} />
       </div>
       {memos.length > 3 && (
-        <button className={styles.scrollBtn} onClick={scrollToBottom} title="最下部へ">
-          ↓
-        </button>
+        <button className={styles.scrollBtn} onClick={scrollToBottom} title="最下部へ">↓</button>
       )}
     </div>
   )

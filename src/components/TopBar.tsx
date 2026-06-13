@@ -1,28 +1,19 @@
 import { ChangeEvent, KeyboardEvent } from 'react'
 import styles from './TopBar.module.css'
-import { Category } from '../types'
-import { CATEGORY_COLORS, CATEGORY_LABELS, CATEGORY_ICONS } from '../utils'
+import { CategoryDef } from '../types'
 
-export type SaveTarget = 'auto' | Category
+export type SaveTarget = 'auto' | string
 
 interface Props {
   query: string
   saveTarget: SaveTarget
+  categories: CategoryDef[]
   onQuery: (q: string) => void
   onSearch: () => void
   onSaveTarget: (t: SaveTarget) => void
 }
 
-const SAVE_TARGETS: { id: SaveTarget; label: string; icon: string }[] = [
-  { id: 'auto', label: 'AI自動', icon: '✦' },
-  { id: 'work', label: CATEGORY_LABELS.work, icon: CATEGORY_ICONS.work },
-  { id: 'private', label: CATEGORY_LABELS.private, icon: CATEGORY_ICONS.private },
-  { id: 'idea', label: CATEGORY_LABELS.idea, icon: CATEGORY_ICONS.idea },
-  { id: 'todo', label: CATEGORY_LABELS.todo, icon: CATEGORY_ICONS.todo },
-  { id: 'other', label: CATEGORY_LABELS.other, icon: CATEGORY_ICONS.other },
-]
-
-export function TopBar({ query, saveTarget, onQuery, onSearch, onSaveTarget }: Props) {
+export function TopBar({ query, saveTarget, categories, onQuery, onSearch, onSaveTarget }: Props) {
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') onSearch()
   }
@@ -51,18 +42,24 @@ export function TopBar({ query, saveTarget, onQuery, onSearch, onSaveTarget }: P
       <div className={styles.saveRow}>
         <span className={styles.saveLabel}>保存先:</span>
         <div className={styles.saveTargets}>
-          {SAVE_TARGETS.map((t) => {
-            const isActive = saveTarget === t.id
-            const color = t.id !== 'auto' ? CATEGORY_COLORS[t.id as Category] : null
+          <button
+            className={`${styles.targetBtn} ${saveTarget === 'auto' ? styles.targetActive : ''}`}
+            onClick={() => onSaveTarget('auto')}
+          >
+            <span>✦</span>
+            <span>AI自動</span>
+          </button>
+          {categories.map((cat) => {
+            const isActive = saveTarget === cat.id
             return (
               <button
-                key={t.id}
+                key={cat.id}
                 className={`${styles.targetBtn} ${isActive ? styles.targetActive : ''}`}
-                style={isActive && color ? { background: color.bg, color: color.text, borderColor: color.border } : {}}
-                onClick={() => onSaveTarget(t.id)}
+                style={isActive ? { background: cat.colors.bg, color: cat.colors.text, borderColor: cat.colors.border } : {}}
+                onClick={() => onSaveTarget(cat.id)}
               >
-                <span>{t.icon}</span>
-                <span>{t.label}</span>
+                <span>{cat.icon}</span>
+                <span>{cat.label}</span>
               </button>
             )
           })}

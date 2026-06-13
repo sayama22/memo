@@ -1,4 +1,12 @@
-export type Category = 'work' | 'private' | 'idea' | 'todo' | 'other'
+export type Category = string
+
+export interface CategoryDef {
+  id: string
+  label: string
+  icon: string
+  colors: { bg: string; text: string; border: string }
+  builtin?: boolean
+}
 
 export interface Memo {
   id: string

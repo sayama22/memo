@@ -46,7 +46,7 @@ export function useMemos() {
   }
 
   const filterMemos = (
-    folder: 'all' | 'important' | 'pinned' | Category,
+    folder: string,
     query: string,
   ) => {
     return memos.filter((m) => {
@@ -58,7 +58,7 @@ export function useMemos() {
     })
   }
 
-  const countFor = (folder: 'all' | 'important' | 'pinned' | Category) => {
+  const countFor = (folder: string) => {
     if (folder === 'all') return memos.length
     if (folder === 'important') return memos.filter((m) => m.important).length
     if (folder === 'pinned') return memos.filter((m) => m.pinned).length

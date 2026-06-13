@@ -38,6 +38,7 @@ export function Sidebar({ selected, categories, counts, onSelect, onAddCategory,
         <FolderItem id="all" label="すべて" icon="📋" selected={selected} count={counts['all'] ?? 0} onSelect={onSelect} />
         <FolderItem id="important" label="重要" icon="⭐" selected={selected} count={counts['important'] ?? 0} onSelect={onSelect} badgeStyle={{ background: '#f59e0b', color: '#fff' }} />
         <FolderItem id="pinned" label="ピン留め" icon="📌" selected={selected} count={counts['pinned'] ?? 0} onSelect={onSelect} />
+        <FolderItem id="completed" label="完了" icon="✓" selected={selected} count={counts['completed'] ?? 0} onSelect={onSelect} badgeStyle={{ background: '#6b7280', color: '#fff' }} />
         <hr className={styles.divider} />
         {categories.map((cat) => (
           <FolderItem

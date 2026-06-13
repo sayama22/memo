@@ -8,7 +8,7 @@ import { MemoList } from './components/MemoList'
 import styles from './App.module.css'
 
 export default function App() {
-  const { memos, addMemo, updateMemo, deleteMemo, filterMemos, countFor } = useMemos()
+  const { memos, addMemo, updateMemo, deleteMemo, hardDeleteMemo, restoreMemo, emptyCompleted, filterMemos, countFor } = useMemos()
   const { categories, addCategory, removeCategory, getCategoryDef } = useCategories()
 
   const [folder, setFolder] = useState<Folder>('all')
@@ -20,9 +20,11 @@ export default function App() {
     all: countFor('all'),
     important: countFor('important'),
     pinned: countFor('pinned'),
+    completed: countFor('completed'),
     ...Object.fromEntries(categories.map((c) => [c.id, countFor(c.id)])),
   }
 
+  const isCompletedView = folder === 'completed'
   const visible = filterMemos(folder, activeQuery)
 
   const handleSave = (text: string) => {
@@ -57,11 +59,12 @@ export default function App() {
           onSearch={() => setActiveQuery(query)}
           onSaveTarget={setSaveTarget}
         />
-        <MemoInput saveTarget={saveTarget} onSave={handleSave} />
+        {!isCompletedView && <MemoInput saveTarget={saveTarget} onSave={handleSave} />}
         <MemoList
           memos={visible}
           categories={categories}
           getCategoryDef={getCategoryDef}
+          completedView={isCompletedView}
           onUpdate={(id, content, category) => updateMemo(id, { content, category })}
           onToggleImportant={(id) => {
             const m = memos.find((x) => x.id === id)
@@ -72,6 +75,9 @@ export default function App() {
             if (m) updateMemo(id, { pinned: !m.pinned })
           }}
           onDelete={deleteMemo}
+          onHardDelete={hardDeleteMemo}
+          onRestore={restoreMemo}
+          onEmptyCompleted={emptyCompleted}
         />
       </main>
     </div>

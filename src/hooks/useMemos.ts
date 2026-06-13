@@ -7,7 +7,9 @@ const STORAGE_KEY = 'memo-app-v2'
 function load(): Memo[] {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
-    return raw ? (JSON.parse(raw) as Memo[]) : []
+    const memos = raw ? (JSON.parse(raw) as Memo[]) : []
+    // migrate old memos that don't have the completed field
+    return memos.map((m) => (m.completed !== undefined ? m : { ...m, completed: false }))
   } catch {
     return []
   }
@@ -32,6 +34,7 @@ export function useMemos() {
       important: false,
       pinned: false,
       createdAt: Date.now(),
+      completed: false,
     }
     setMemos((prev) => [memo, ...prev])
     return memo
@@ -41,15 +44,31 @@ export function useMemos() {
     setMemos((prev) => prev.map((m) => (m.id === id ? { ...m, ...changes } : m)))
   }
 
+  // soft delete: move to 完了
   const deleteMemo = (id: string) => {
+    setMemos((prev) => prev.map((m) => m.id === id ? { ...m, completed: true, pinned: false } : m))
+  }
+
+  // hard delete: remove permanently (only from 完了 view)
+  const hardDeleteMemo = (id: string) => {
     setMemos((prev) => prev.filter((m) => m.id !== id))
   }
 
-  const filterMemos = (
-    folder: string,
-    query: string,
-  ) => {
+  // restore from 完了 back to active
+  const restoreMemo = (id: string) => {
+    setMemos((prev) => prev.map((m) => m.id === id ? { ...m, completed: false } : m))
+  }
+
+  // empty all completed
+  const emptyCompleted = () => {
+    setMemos((prev) => prev.filter((m) => !m.completed))
+  }
+
+  const filterMemos = (folder: string, query: string) => {
     return memos.filter((m) => {
+      // 完了フォルダー以外では completed を除外
+      if (folder === 'completed') return m.completed && (!query || m.content.toLowerCase().includes(query.toLowerCase()))
+      if (m.completed) return false
       if (folder === 'important' && !m.important) return false
       if (folder === 'pinned' && !m.pinned) return false
       if (folder !== 'all' && folder !== 'important' && folder !== 'pinned' && m.category !== folder) return false
@@ -59,11 +78,13 @@ export function useMemos() {
   }
 
   const countFor = (folder: string) => {
-    if (folder === 'all') return memos.length
-    if (folder === 'important') return memos.filter((m) => m.important).length
-    if (folder === 'pinned') return memos.filter((m) => m.pinned).length
-    return memos.filter((m) => m.category === folder).length
+    if (folder === 'completed') return memos.filter((m) => m.completed).length
+    const active = memos.filter((m) => !m.completed)
+    if (folder === 'all') return active.length
+    if (folder === 'important') return active.filter((m) => m.important).length
+    if (folder === 'pinned') return active.filter((m) => m.pinned).length
+    return active.filter((m) => m.category === folder).length
   }
 
-  return { memos, addMemo, updateMemo, deleteMemo, filterMemos, countFor }
+  return { memos, addMemo, updateMemo, deleteMemo, hardDeleteMemo, restoreMemo, emptyCompleted, filterMemos, countFor }
 }

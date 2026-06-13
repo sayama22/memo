@@ -7,13 +7,17 @@ interface Props {
   memos: Memo[]
   categories: CategoryDef[]
   getCategoryDef: (id: string) => CategoryDef
+  completedView?: boolean
   onUpdate: (id: string, content: string, category: string) => void
   onToggleImportant: (id: string) => void
   onTogglePin: (id: string) => void
   onDelete: (id: string) => void
+  onHardDelete?: (id: string) => void
+  onRestore?: (id: string) => void
+  onEmptyCompleted?: () => void
 }
 
-export function MemoList({ memos, categories, getCategoryDef, onUpdate, onToggleImportant, onTogglePin, onDelete }: Props) {
+export function MemoList({ memos, categories, getCategoryDef, completedView, onUpdate, onToggleImportant, onTogglePin, onDelete, onHardDelete, onRestore, onEmptyCompleted }: Props) {
   const bottomRef = useRef<HTMLDivElement>(null)
 
   const scrollToBottom = () => {
@@ -22,11 +26,19 @@ export function MemoList({ memos, categories, getCategoryDef, onUpdate, onToggle
 
   return (
     <div className={styles.wrapper}>
+      {completedView && memos.length > 0 && (
+        <div className={styles.completedHeader}>
+          <span className={styles.completedCount}>{memos.length} 件</span>
+          <button className={styles.emptyBtn} onClick={onEmptyCompleted}>
+            🗑 すべて完全削除
+          </button>
+        </div>
+      )}
       <div className={styles.list}>
         {memos.length === 0 ? (
           <div className={styles.empty}>
-            <span className={styles.emptyIcon}>🗒</span>
-            <p>メモはありません</p>
+            <span className={styles.emptyIcon}>{completedView ? '✓' : '🗒'}</span>
+            <p>{completedView ? '完了したメモはありません' : 'メモはありません'}</p>
           </div>
         ) : (
           memos.map((m) => (
@@ -35,10 +47,13 @@ export function MemoList({ memos, categories, getCategoryDef, onUpdate, onToggle
               memo={m}
               categories={categories}
               getCategoryDef={getCategoryDef}
+              completedView={completedView}
               onUpdate={(content, category) => onUpdate(m.id, content, category)}
               onToggleImportant={() => onToggleImportant(m.id)}
               onTogglePin={() => onTogglePin(m.id)}
               onDelete={() => onDelete(m.id)}
+              onHardDelete={() => onHardDelete?.(m.id)}
+              onRestore={() => onRestore?.(m.id)}
             />
           ))
         )}

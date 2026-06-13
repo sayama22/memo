@@ -6,13 +6,16 @@ interface Props {
   memo: Memo
   categories: CategoryDef[]
   getCategoryDef: (id: string) => CategoryDef
+  completedView?: boolean
   onUpdate: (content: string, category: string) => void
   onToggleImportant: () => void
   onTogglePin: () => void
   onDelete: () => void
+  onHardDelete?: () => void
+  onRestore?: () => void
 }
 
-export function MemoCard({ memo, categories, getCategoryDef, onUpdate, onToggleImportant, onTogglePin, onDelete }: Props) {
+export function MemoCard({ memo, categories, getCategoryDef, completedView, onUpdate, onToggleImportant, onTogglePin, onDelete, onHardDelete, onRestore }: Props) {
   const [editing, setEditing] = useState(false)
   const [draft, setDraft] = useState(memo.content)
   const [draftCategory, setDraftCategory] = useState(memo.category)
@@ -58,7 +61,7 @@ export function MemoCard({ memo, categories, getCategoryDef, onUpdate, onToggleI
 
   return (
     <article
-      className={`${styles.card} ${editing ? styles.editingCard : ''}`}
+      className={`${styles.card} ${editing ? styles.editingCard : ''} ${completedView ? styles.completedCard : ''}`}
       style={{ borderLeftColor: color.border, borderLeftWidth: 4 }}
     >
       <div className={styles.body}>
@@ -106,8 +109,14 @@ export function MemoCard({ memo, categories, getCategoryDef, onUpdate, onToggleI
           )}
         </div>
       </div>
+
       <div className={styles.actions}>
-        {editing ? (
+        {completedView ? (
+          <>
+            <button className={`${styles.iconBtn} ${styles.restoreBtn}`} onClick={onRestore} title="元に戻す">↩</button>
+            <button className={`${styles.iconBtn} ${styles.deleteBtn}`} onClick={onHardDelete} title="完全に削除">🗑</button>
+          </>
+        ) : editing ? (
           <>
             <button className={`${styles.iconBtn} ${styles.saveEditBtn}`} onClick={commitEdit} title="保存">✓</button>
             <button className={`${styles.iconBtn} ${styles.cancelBtn}`} onClick={cancelEdit} title="キャンセル">✕</button>
@@ -117,7 +126,7 @@ export function MemoCard({ memo, categories, getCategoryDef, onUpdate, onToggleI
             <button className={styles.iconBtn} onClick={startEdit} title="編集">✏️</button>
             <button className={`${styles.iconBtn} ${memo.important ? styles.active : ''}`} onClick={onToggleImportant} title="重要">⭐</button>
             <button className={`${styles.iconBtn} ${memo.pinned ? styles.active : ''}`} onClick={onTogglePin} title="ピン留め">📌</button>
-            <button className={`${styles.iconBtn} ${styles.deleteBtn}`} onClick={onDelete} title="削除">🗑</button>
+            <button className={`${styles.iconBtn} ${styles.deleteBtn}`} onClick={onDelete} title="完了へ移動">🗑</button>
           </>
         )}
       </div>

@@ -15,4 +15,5 @@ export interface Memo {
   important: boolean
   pinned: boolean
   createdAt: number
+  completed: boolean
 }

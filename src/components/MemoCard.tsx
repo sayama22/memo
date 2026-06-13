@@ -2,10 +2,12 @@ import { KeyboardEvent, useEffect, useRef, useState } from 'react'
 import { CategoryDef, Memo } from '../types'
 import styles from './MemoCard.module.css'
 
+
 interface Props {
   memo: Memo
   categories: CategoryDef[]
   getCategoryDef: (id: string) => CategoryDef
+  getImage: (id: string) => string | undefined
   completedView?: boolean
   onUpdate: (content: string, category: string) => void
   onToggleImportant: () => void
@@ -15,10 +17,11 @@ interface Props {
   onRestore?: () => void
 }
 
-export function MemoCard({ memo, categories, getCategoryDef, completedView, onUpdate, onToggleImportant, onTogglePin, onDelete, onHardDelete, onRestore }: Props) {
+export function MemoCard({ memo, categories, getCategoryDef, getImage, completedView, onUpdate, onToggleImportant, onTogglePin, onDelete, onHardDelete, onRestore }: Props) {
   const [editing, setEditing] = useState(false)
   const [draft, setDraft] = useState(memo.content)
   const [draftCategory, setDraftCategory] = useState(memo.category)
+  const [lightboxUrl, setLightboxUrl] = useState<string | null>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   useEffect(() => {
@@ -108,7 +111,30 @@ export function MemoCard({ memo, categories, getCategoryDef, completedView, onUp
             <span className={styles.editHint}>Ctrl+Enter で保存 / Esc でキャンセル</span>
           )}
         </div>
+        {!editing && memo.imageIds.length > 0 && (
+          <div className={styles.imageGrid}>
+            {memo.imageIds.map((imgId) => {
+              const url = getImage(imgId)
+              return url ? (
+                <img
+                  key={imgId}
+                  src={url}
+                  className={styles.imageThumb}
+                  alt=""
+                  onClick={() => setLightboxUrl(url)}
+                />
+              ) : null
+            })}
+          </div>
+        )}
       </div>
+
+      {lightboxUrl && (
+        <div className={styles.lightbox} onClick={() => setLightboxUrl(null)}>
+          <img src={lightboxUrl} className={styles.lightboxImg} alt="" onClick={(e) => e.stopPropagation()} />
+          <button className={styles.lightboxClose} onClick={() => setLightboxUrl(null)}>✕</button>
+        </div>
+      )}
 
       <div className={styles.actions}>
         {completedView ? (

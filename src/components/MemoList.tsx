@@ -7,6 +7,7 @@ interface Props {
   memos: Memo[]
   categories: CategoryDef[]
   getCategoryDef: (id: string) => CategoryDef
+  getImage: (id: string) => string | undefined
   completedView?: boolean
   onUpdate: (id: string, content: string, category: string) => void
   onToggleImportant: (id: string) => void
@@ -17,7 +18,7 @@ interface Props {
   onEmptyCompleted?: () => void
 }
 
-export function MemoList({ memos, categories, getCategoryDef, completedView, onUpdate, onToggleImportant, onTogglePin, onDelete, onHardDelete, onRestore, onEmptyCompleted }: Props) {
+export function MemoList({ memos, categories, getCategoryDef, getImage, completedView, onUpdate, onToggleImportant, onTogglePin, onDelete, onHardDelete, onRestore, onEmptyCompleted }: Props) {
   const bottomRef = useRef<HTMLDivElement>(null)
 
   const scrollToBottom = () => {
@@ -47,6 +48,7 @@ export function MemoList({ memos, categories, getCategoryDef, completedView, onU
               memo={m}
               categories={categories}
               getCategoryDef={getCategoryDef}
+              getImage={getImage}
               completedView={completedView}
               onUpdate={(content, category) => onUpdate(m.id, content, category)}
               onToggleImportant={() => onToggleImportant(m.id)}

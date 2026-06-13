@@ -9,7 +9,12 @@ function load(): Memo[] {
     const raw = localStorage.getItem(STORAGE_KEY)
     const memos = raw ? (JSON.parse(raw) as Memo[]) : []
     // migrate old memos that don't have the completed field
-    return memos.map((m) => (m.completed !== undefined ? m : { ...m, completed: false }))
+    return memos.map((m) => {
+      const migrated = { ...m }
+      if (!Array.isArray(migrated.imageIds)) migrated.imageIds = []
+      if (migrated.completed === undefined) migrated.completed = false
+      return migrated
+    })
   } catch {
     return []
   }
@@ -26,7 +31,7 @@ export function useMemos() {
     save(memos)
   }, [memos])
 
-  const addMemo = (content: string, categoryOverride?: Category) => {
+  const addMemo = (content: string, categoryOverride?: Category, imageIds: string[] = []) => {
     const memo: Memo = {
       id: Date.now().toString(),
       content: content.trim(),
@@ -35,6 +40,7 @@ export function useMemos() {
       pinned: false,
       createdAt: Date.now(),
       completed: false,
+      imageIds,
     }
     setMemos((prev) => [memo, ...prev])
     return memo

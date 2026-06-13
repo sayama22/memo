@@ -16,4 +16,5 @@ export interface Memo {
   pinned: boolean
   createdAt: number
   completed: boolean
+  imageIds: string[]
 }

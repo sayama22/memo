@@ -100,9 +100,44 @@
   opacity: 1 !important;
 }
 
-.deleteBtn:hover {
-  background: #fee2e2;
+.categorySelector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 8px;
 }
+
+.catBtn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: background 0.1s, border-color 0.1s, color 0.1s;
+  font-family: inherit;
+}
+
+.catBtn:hover {
+  background: var(--hover);
+  color: var(--text);
+}
+
+.catBtnActive {
+  background: var(--active-bg) !important;
+  color: var(--active-text) !important;
+  border-color: var(--active-bg) !important;
+}
+
+.categoryEditing {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
 
 .saveEditBtn {
   opacity: 1 !important;

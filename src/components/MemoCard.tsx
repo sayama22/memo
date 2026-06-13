@@ -1,19 +1,22 @@
 import { KeyboardEvent, useEffect, useRef, useState } from 'react'
-import { Memo } from '../types'
-import { CATEGORY_LABELS } from '../utils'
+import { Category, Memo } from '../types'
+import { CATEGORY_ICONS, CATEGORY_LABELS } from '../utils'
 import styles from './MemoCard.module.css'
 
 interface Props {
   memo: Memo
-  onUpdate: (content: string) => void
+  onUpdate: (content: string, category: Category) => void
   onToggleImportant: () => void
   onTogglePin: () => void
   onDelete: () => void
 }
 
+const CATEGORIES: Category[] = ['work', 'private', 'idea', 'todo', 'other']
+
 export function MemoCard({ memo, onUpdate, onToggleImportant, onTogglePin, onDelete }: Props) {
   const [editing, setEditing] = useState(false)
   const [draft, setDraft] = useState(memo.content)
+  const [draftCategory, setDraftCategory] = useState<Category>(memo.category)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   useEffect(() => {
@@ -24,18 +27,23 @@ export function MemoCard({ memo, onUpdate, onToggleImportant, onTogglePin, onDel
     }
   }, [editing])
 
+  const startEdit = () => {
+    setDraft(memo.content)
+    setDraftCategory(memo.category)
+    setEditing(true)
+  }
+
   const commitEdit = () => {
     const trimmed = draft.trim()
-    if (trimmed && trimmed !== memo.content) {
-      onUpdate(trimmed)
-    } else {
-      setDraft(memo.content)
+    if (trimmed) {
+      onUpdate(trimmed, draftCategory)
     }
     setEditing(false)
   }
 
   const cancelEdit = () => {
     setDraft(memo.content)
+    setDraftCategory(memo.category)
     setEditing(false)
   }
 
@@ -61,19 +69,36 @@ export function MemoCard({ memo, onUpdate, onToggleImportant, onTogglePin, onDel
     <article className={`${styles.card} ${editing ? styles.editingCard : ''}`}>
       <div className={styles.body}>
         {editing ? (
-          <textarea
-            ref={textareaRef}
-            className={styles.editTextarea}
-            value={draft}
-            onChange={(e) => setDraft(e.target.value)}
-            onKeyDown={handleKeyDown}
-            rows={4}
-          />
+          <>
+            <textarea
+              ref={textareaRef}
+              className={styles.editTextarea}
+              value={draft}
+              onChange={(e) => setDraft(e.target.value)}
+              onKeyDown={handleKeyDown}
+              rows={4}
+            />
+            <div className={styles.categorySelector}>
+              {CATEGORIES.map((cat) => (
+                <button
+                  key={cat}
+                  className={`${styles.catBtn} ${draftCategory === cat ? styles.catBtnActive : ''}`}
+                  onClick={() => setDraftCategory(cat)}
+                  type="button"
+                >
+                  <span>{CATEGORY_ICONS[cat]}</span>
+                  <span>{CATEGORY_LABELS[cat]}</span>
+                </button>
+              ))}
+            </div>
+          </>
         ) : (
           <p className={styles.content}>{memo.content}</p>
         )}
         <div className={styles.footer}>
-          <span className={styles.category}>{CATEGORY_LABELS[memo.category]}</span>
+          <span className={`${styles.category} ${editing ? styles.categoryEditing : ''}`}>
+            {editing ? CATEGORY_LABELS[draftCategory] : CATEGORY_LABELS[memo.category]}
+          </span>
           <span className={styles.date}>{date}</span>
           {editing && (
             <span className={styles.editHint}>Ctrl+Enter で保存 / Esc でキャンセル</span>
@@ -92,11 +117,7 @@ export function MemoCard({ memo, onUpdate, onToggleImportant, onTogglePin, onDel
           </>
         ) : (
           <>
-            <button
-              className={styles.iconBtn}
-              onClick={() => setEditing(true)}
-              title="編集"
-            >
+            <button className={styles.iconBtn} onClick={startEdit} title="編集">
               ✏️
             </button>
             <button

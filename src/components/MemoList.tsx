@@ -1,11 +1,11 @@
 import { useRef } from 'react'
-import { Memo } from '../types'
+import { Category, Memo } from '../types'
 import { MemoCard } from './MemoCard'
 import styles from './MemoList.module.css'
 
 interface Props {
   memos: Memo[]
-  onUpdate: (id: string, content: string) => void
+  onUpdate: (id: string, content: string, category: Category) => void
   onToggleImportant: (id: string) => void
   onTogglePin: (id: string) => void
   onDelete: (id: string) => void
@@ -31,7 +31,7 @@ export function MemoList({ memos, onUpdate, onToggleImportant, onTogglePin, onDe
             <MemoCard
               key={m.id}
               memo={m}
-              onUpdate={(content) => onUpdate(m.id, content)}
+              onUpdate={(content, category) => onUpdate(m.id, content, category)}
               onToggleImportant={() => onToggleImportant(m.id)}
               onTogglePin={() => onTogglePin(m.id)}
               onDelete={() => onDelete(m.id)}

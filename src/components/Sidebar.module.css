@@ -1,0 +1,94 @@
+.sidebar {
+  width: 220px;
+  min-width: 200px;
+  background: var(--sidebar-bg);
+  padding: 20px 12px;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--border);
+}
+
+.label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0 0 10px 8px;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 10px;
+  border: none;
+  background: none;
+  border-radius: 8px;
+  cursor: pointer;
+  color: var(--text);
+  font-size: 0.875rem;
+  transition: background 0.1s;
+  text-align: left;
+}
+
+.item:hover {
+  background: var(--hover);
+}
+
+.active {
+  background: var(--active-bg) !important;
+  color: var(--active-text) !important;
+}
+
+.active .badge {
+  background: rgba(255, 255, 255, 0.2) !important;
+  color: #fff !important;
+}
+
+.icon {
+  font-size: 0.95rem;
+  width: 20px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.itemLabel {
+  flex: 1;
+  font-size: 0.875rem;
+}
+
+.badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  background: var(--badge-blue);
+  color: var(--badge-text);
+  border-radius: 999px;
+  padding: 1px 7px;
+  min-width: 22px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.badgeOrange {
+  background: var(--badge-orange);
+}
+
+.badgeZero {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 8px 0;
+}

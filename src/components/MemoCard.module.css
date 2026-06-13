@@ -1,0 +1,79 @@
+.card {
+  display: flex;
+  gap: 12px;
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  transition: box-shadow 0.15s;
+}
+
+.card:hover {
+  box-shadow: var(--shadow);
+}
+
+.body {
+  flex: 1;
+  min-width: 0;
+}
+
+.content {
+  margin: 0 0 8px;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.category {
+  font-size: 0.7rem;
+  font-weight: 600;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 2px 8px;
+  color: var(--text-muted);
+}
+
+.date {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  justify-content: flex-start;
+}
+
+.iconBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  opacity: 0.3;
+  transition: opacity 0.12s, background 0.12s;
+  line-height: 1;
+}
+
+.iconBtn:hover {
+  opacity: 0.9;
+  background: var(--hover);
+}
+
+.active {
+  opacity: 1 !important;
+}
+
+.deleteBtn:hover {
+  background: #fee2e2;
+}

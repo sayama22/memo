@@ -1,0 +1,59 @@
+:root {
+  --bg: #f5f4f0;
+  --surface: #ffffff;
+  --sidebar-bg: #eeecea;
+  --text: #1a1a1a;
+  --text-muted: #a0a09a;
+  --border: #e0deda;
+  --hover: rgba(0, 0, 0, 0.04);
+  --active-bg: #1a1a1a;
+  --active-text: #ffffff;
+  --badge-blue: #3b82f6;
+  --badge-orange: #f59e0b;
+  --badge-text: #ffffff;
+  --accent: #3b82f6;
+  --input-bg: #ffffff;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --radius: 10px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1a1918;
+    --surface: #242322;
+    --sidebar-bg: #141312;
+    --text: #f0ede8;
+    --text-muted: #6b6860;
+    --border: #2e2c2a;
+    --hover: rgba(255, 255, 255, 0.05);
+    --active-bg: #f0ede8;
+    --active-text: #1a1918;
+    --input-bg: #1e1d1c;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Hiragino Kaku Gothic ProN',
+    'Noto Sans JP', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  font-family: inherit;
+}

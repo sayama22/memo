@@ -108,8 +108,51 @@
   background: var(--hover);
 }
 
-.targetActive {
-  background: var(--active-bg);
-  color: var(--active-text);
-  border-color: var(--active-bg);
+.menuBtn {
+  display: none;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  width: 42px;
+  height: 42px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  color: var(--text);
+  flex-shrink: 0;
+  box-shadow: var(--shadow);
+}
+
+@media (max-width: 767px) {
+  .menuBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .searchBtn {
+    display: none;
+  }
+
+  .saveRow {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .saveRow::-webkit-scrollbar {
+    display: none;
+  }
+
+  .saveTargets {
+    flex-wrap: nowrap;
+  }
+
+  .saveLabel {
+    display: none;
+  }
+
+  .targetBtn {
+    white-space: nowrap;
+  }
 }

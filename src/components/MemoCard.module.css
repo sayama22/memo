@@ -210,8 +210,27 @@
   transition: background 0.1s;
 }
 
-.lightboxClose:hover {
-  background: rgba(255, 255, 255, 0.3);
+/* mobile: always show action buttons */
+@media (max-width: 767px) {
+  .iconBtn {
+    opacity: 0.6;
+  }
+
+  .actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-self: flex-end;
+    gap: 2px;
+  }
+
+  .card {
+    flex-direction: column;
+  }
+
+  .imageThumb {
+    width: 70px;
+    height: 70px;
+  }
 }
 
 .completedCard:hover {

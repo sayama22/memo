@@ -9,6 +9,8 @@ interface Props {
   selected: Folder
   categories: CategoryDef[]
   counts: Record<string, number>
+  isOpen: boolean
+  onClose: () => void
   onSelect: (f: Folder) => void
   onAddCategory: (label: string, icon: string, colors: CategoryDef['colors']) => void
   onRemoveCategory: (id: string) => void
@@ -16,7 +18,7 @@ interface Props {
 
 const ICON_OPTIONS = ['📂', '🏠', '🎯', '🔖', '🛒', '📝', '🎨', '🏋️', '🎵', '🌱', '🔧', '🚀', '💰', '📚', '🎮', '✈️']
 
-export function Sidebar({ selected, categories, counts, onSelect, onAddCategory, onRemoveCategory }: Props) {
+export function Sidebar({ selected, categories, counts, isOpen, onClose, onSelect, onAddCategory, onRemoveCategory }: Props) {
   const [adding, setAdding] = useState(false)
   const [newLabel, setNewLabel] = useState('')
   const [newIcon, setNewIcon] = useState('📂')
@@ -31,14 +33,20 @@ export function Sidebar({ selected, categories, counts, onSelect, onAddCategory,
     setAdding(false)
   }
 
+  const handleSelect = (f: Folder) => {
+    onSelect(f)
+    onClose()
+  }
+
   return (
-    <aside className={styles.sidebar}>
+    <aside className={`${styles.sidebar} ${isOpen ? styles.sidebarOpen : ''}`}>
+      <button className={styles.closeBtn} onClick={onClose}>✕</button>
       <p className={styles.label}>フォルダー</p>
       <nav className={styles.nav}>
-        <FolderItem id="all" label="すべて" icon="📋" selected={selected} count={counts['all'] ?? 0} onSelect={onSelect} />
-        <FolderItem id="important" label="重要" icon="⭐" selected={selected} count={counts['important'] ?? 0} onSelect={onSelect} badgeStyle={{ background: '#f59e0b', color: '#fff' }} />
-        <FolderItem id="pinned" label="ピン留め" icon="📌" selected={selected} count={counts['pinned'] ?? 0} onSelect={onSelect} />
-        <FolderItem id="completed" label="完了" icon="✓" selected={selected} count={counts['completed'] ?? 0} onSelect={onSelect} badgeStyle={{ background: '#6b7280', color: '#fff' }} />
+        <FolderItem id="all" label="すべて" icon="📋" selected={selected} count={counts['all'] ?? 0} onSelect={handleSelect} />
+        <FolderItem id="important" label="重要" icon="⭐" selected={selected} count={counts['important'] ?? 0} onSelect={handleSelect} badgeStyle={{ background: '#f59e0b', color: '#fff' }} />
+        <FolderItem id="pinned" label="ピン留め" icon="📌" selected={selected} count={counts['pinned'] ?? 0} onSelect={handleSelect} />
+        <FolderItem id="completed" label="完了" icon="✓" selected={selected} count={counts['completed'] ?? 0} onSelect={handleSelect} badgeStyle={{ background: '#6b7280', color: '#fff' }} />
         <hr className={styles.divider} />
         {categories.map((cat) => (
           <FolderItem
@@ -48,7 +56,7 @@ export function Sidebar({ selected, categories, counts, onSelect, onAddCategory,
             icon={cat.icon}
             selected={selected}
             count={counts[cat.id] ?? 0}
-            onSelect={onSelect}
+            onSelect={handleSelect}
             color={cat.colors}
             onRemove={!cat.builtin ? () => onRemoveCategory(cat.id) : undefined}
           />

@@ -8,12 +8,13 @@ interface Props {
   query: string
   saveTarget: SaveTarget
   categories: CategoryDef[]
+  onMenuOpen: () => void
   onQuery: (q: string) => void
   onSearch: () => void
   onSaveTarget: (t: SaveTarget) => void
 }
 
-export function TopBar({ query, saveTarget, categories, onQuery, onSearch, onSaveTarget }: Props) {
+export function TopBar({ query, saveTarget, categories, onMenuOpen, onQuery, onSearch, onSaveTarget }: Props) {
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') onSearch()
   }
@@ -21,6 +22,7 @@ export function TopBar({ query, saveTarget, categories, onQuery, onSearch, onSav
   return (
     <div className={styles.wrapper}>
       <div className={styles.searchRow}>
+        <button className={styles.menuBtn} onClick={onMenuOpen} title="メニュー">☰</button>
         <div className={styles.searchBox}>
           <span className={styles.searchIcon}>🔍</span>
           <input

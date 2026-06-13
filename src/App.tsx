@@ -17,6 +17,7 @@ export default function App() {
   const [query, setQuery] = useState('')
   const [activeQuery, setActiveQuery] = useState('')
   const [saveTarget, setSaveTarget] = useState<SaveTarget>('auto')
+  const [menuOpen, setMenuOpen] = useState(false)
 
   const SPECIAL_FOLDERS = ['all', 'important', 'pinned', 'completed']
 
@@ -63,10 +64,13 @@ export default function App() {
 
   return (
     <div className={styles.app}>
+      {menuOpen && <div className={styles.backdrop} onClick={() => setMenuOpen(false)} />}
       <Sidebar
         selected={folder}
         categories={categories}
         counts={counts}
+        isOpen={menuOpen}
+        onClose={() => setMenuOpen(false)}
         onSelect={handleFolderSelect}
         onAddCategory={addCategory}
         onRemoveCategory={(id) => {
@@ -79,6 +83,7 @@ export default function App() {
           query={query}
           saveTarget={saveTarget}
           categories={categories}
+          onMenuOpen={() => setMenuOpen(true)}
           onQuery={setQuery}
           onSearch={() => setActiveQuery(query)}
           onSaveTarget={setSaveTarget}

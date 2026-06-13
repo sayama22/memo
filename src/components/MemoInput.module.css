@@ -149,6 +149,18 @@
   color: var(--text-muted);
 }
 
-.hiddenInput {
-  display: none;
+@media (max-width: 767px) {
+  .inner {
+    min-height: 120px;
+    padding: 12px 14px;
+  }
+
+  .textarea {
+    min-height: 80px;
+    font-size: 1rem;
+  }
+
+  .dropHint {
+    display: none;
+  }
 }

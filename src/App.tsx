@@ -31,10 +31,18 @@ export default function App() {
     addMemo(text, saveTarget === 'auto' ? undefined : saveTarget)
   }
 
+  const SPECIAL_FOLDERS = ['all', 'important', 'pinned', 'completed']
+
   const handleFolderSelect = (f: Folder) => {
     setFolder(f)
     setActiveQuery('')
     setQuery('')
+    // カテゴリーフォルダーなら保存先を自動切り替え
+    if (!SPECIAL_FOLDERS.includes(f)) {
+      setSaveTarget(f)
+    } else {
+      setSaveTarget('auto')
+    }
   }
 
   return (
@@ -59,7 +67,7 @@ export default function App() {
           onSearch={() => setActiveQuery(query)}
           onSaveTarget={setSaveTarget}
         />
-        {!isCompletedView && <MemoInput saveTarget={saveTarget} onSave={handleSave} />}
+        {!isCompletedView && <MemoInput saveTarget={saveTarget} getCategoryDef={getCategoryDef} onSave={handleSave} />}
         <MemoList
           memos={visible}
           categories={categories}

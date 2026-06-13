@@ -5,12 +5,13 @@ import styles from './MemoList.module.css'
 
 interface Props {
   memos: Memo[]
+  onUpdate: (id: string, content: string) => void
   onToggleImportant: (id: string) => void
   onTogglePin: (id: string) => void
   onDelete: (id: string) => void
 }
 
-export function MemoList({ memos, onToggleImportant, onTogglePin, onDelete }: Props) {
+export function MemoList({ memos, onUpdate, onToggleImportant, onTogglePin, onDelete }: Props) {
   const bottomRef = useRef<HTMLDivElement>(null)
 
   const scrollToBottom = () => {
@@ -30,6 +31,7 @@ export function MemoList({ memos, onToggleImportant, onTogglePin, onDelete }: Pr
             <MemoCard
               key={m.id}
               memo={m}
+              onUpdate={(content) => onUpdate(m.id, content)}
               onToggleImportant={() => onToggleImportant(m.id)}
               onTogglePin={() => onTogglePin(m.id)}
               onDelete={() => onDelete(m.id)}

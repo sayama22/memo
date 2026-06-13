@@ -5,11 +5,16 @@
   border-radius: var(--radius);
   padding: 14px 16px;
   border: 1px solid var(--border);
-  transition: box-shadow 0.15s;
+  transition: box-shadow 0.15s, border-color 0.15s;
 }
 
 .card:hover {
   box-shadow: var(--shadow);
+}
+
+.editingCard {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 12%, transparent);
 }
 
 .body {
@@ -25,10 +30,25 @@
   word-break: break-word;
 }
 
+.editTextarea {
+  width: 100%;
+  border: none;
+  outline: none;
+  resize: none;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  font-family: inherit;
+  background: transparent;
+  color: var(--text);
+  margin-bottom: 8px;
+  padding: 0;
+}
+
 .footer {
   display: flex;
   align-items: center;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 .category {
@@ -44,6 +64,12 @@
 .date {
   font-size: 0.72rem;
   color: var(--text-muted);
+}
+
+.editHint {
+  font-size: 0.7rem;
+  color: var(--accent);
+  opacity: 0.8;
 }
 
 .actions {
@@ -76,4 +102,20 @@
 
 .deleteBtn:hover {
   background: #fee2e2;
+}
+
+.saveEditBtn {
+  opacity: 1 !important;
+  color: var(--accent);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.saveEditBtn:hover {
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+.cancelBtn {
+  opacity: 0.6 !important;
+  font-size: 0.9rem;
 }

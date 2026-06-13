@@ -49,6 +49,7 @@ export default function App() {
         <MemoInput saveTarget={saveTarget} onSave={handleSave} />
         <MemoList
           memos={visible}
+          onUpdate={(id, content) => updateMemo(id, { content })}
           onToggleImportant={(id) => {
             const m = memos.find((x) => x.id === id)
             if (m) updateMemo(id, { important: !m.important })

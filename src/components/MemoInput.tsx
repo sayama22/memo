@@ -1,11 +1,13 @@
 import { KeyboardEvent, useRef, useState } from 'react'
 import styles from './MemoInput.module.css'
+import { Category } from '../types'
 
 interface Props {
+  saveTarget: 'auto' | Category
   onSave: (text: string) => void
 }
 
-export function MemoInput({ onSave }: Props) {
+export function MemoInput({ saveTarget, onSave }: Props) {
   const [text, setText] = useState('')
   const ref = useRef<HTMLTextAreaElement>(null)
 
@@ -23,12 +25,17 @@ export function MemoInput({ onSave }: Props) {
     }
   }
 
+  const placeholder =
+    saveTarget === 'auto'
+      ? 'メモを入力 — AIが自動で仕分け保存します (Ctrl+Enter)'
+      : `メモを入力 — Ctrl+Enterで保存`
+
   return (
     <div className={styles.wrapper}>
       <textarea
         ref={ref}
         className={styles.textarea}
-        placeholder={'メモを入力 — AIが自動で仕分け保存します (Ctrl+Enter)'}
+        placeholder={placeholder}
         value={text}
         onChange={(e) => setText(e.target.value)}
         onKeyDown={handleKeyDown}

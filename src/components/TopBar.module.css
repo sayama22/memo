@@ -4,9 +4,9 @@
   gap: 10px;
 }
 
-.row {
+.searchRow {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   align-items: center;
 }
 
@@ -51,53 +51,64 @@
   padding: 2px;
 }
 
-.csvBtn {
+.searchBtn {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 10px 16px;
-  font-size: 0.82rem;
-  font-weight: 600;
+  padding: 10px 18px;
+  font-size: 0.85rem;
+  font-weight: 500;
   cursor: pointer;
   color: var(--text);
   white-space: nowrap;
   box-shadow: var(--shadow);
   transition: background 0.12s;
-}
-
-.csvBtn:hover {
-  background: var(--hover);
-}
-
-.periods {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.periodLabel {
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  margin-right: 2px;
-}
-
-.periodBtn {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  padding: 5px 14px;
-  font-size: 0.82rem;
-  cursor: pointer;
-  color: var(--text);
-  transition: background 0.1s, color 0.1s, border-color 0.1s;
   font-family: inherit;
 }
 
-.periodBtn:hover {
+.searchBtn:hover {
   background: var(--hover);
 }
 
-.periodActive {
+.saveRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.saveLabel {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  padding-top: 8px;
+}
+
+.saveTargets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.targetBtn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 0.82rem;
+  cursor: pointer;
+  color: var(--text);
+  transition: background 0.1s, border-color 0.1s;
+  font-family: inherit;
+}
+
+.targetBtn:hover {
+  background: var(--hover);
+}
+
+.targetActive {
   background: var(--active-bg);
   color: var(--active-text);
   border-color: var(--active-bg);

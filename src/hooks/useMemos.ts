@@ -24,11 +24,11 @@ export function useMemos() {
     save(memos)
   }, [memos])
 
-  const addMemo = (content: string) => {
+  const addMemo = (content: string, categoryOverride?: Category) => {
     const memo: Memo = {
       id: Date.now().toString(),
       content: content.trim(),
-      category: autoCategory(content),
+      category: categoryOverride ?? autoCategory(content),
       important: false,
       pinned: false,
       createdAt: Date.now(),
@@ -47,18 +47,12 @@ export function useMemos() {
 
   const filterMemos = (
     folder: 'all' | 'important' | 'pinned' | Category,
-    period: 'all' | 'today' | 'week' | 'month',
     query: string,
   ) => {
-    const now = Date.now()
-    const DAY = 86400000
     return memos.filter((m) => {
       if (folder === 'important' && !m.important) return false
       if (folder === 'pinned' && !m.pinned) return false
       if (folder !== 'all' && folder !== 'important' && folder !== 'pinned' && m.category !== folder) return false
-      if (period === 'today' && now - m.createdAt > DAY) return false
-      if (period === 'week' && now - m.createdAt > 7 * DAY) return false
-      if (period === 'month' && now - m.createdAt > 30 * DAY) return false
       if (query && !m.content.toLowerCase().includes(query.toLowerCase())) return false
       return true
     })

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useMemos } from './hooks/useMemos'
 import { Sidebar, Folder } from './components/Sidebar'
-import { TopBar, Period } from './components/TopBar'
+import { TopBar, SaveTarget } from './components/TopBar'
 import { MemoInput } from './components/MemoInput'
 import { MemoList } from './components/MemoList'
 import styles from './App.module.css'
@@ -12,8 +12,9 @@ const ALL_FOLDERS: Folder[] = ['all', 'important', 'pinned', 'work', 'private', 
 export default function App() {
   const { memos, addMemo, updateMemo, deleteMemo, filterMemos, countFor } = useMemos()
   const [folder, setFolder] = useState<Folder>('all')
-  const [period, setPeriod] = useState<Period>('all')
   const [query, setQuery] = useState('')
+  const [activeQuery, setActiveQuery] = useState('')
+  const [saveTarget, setSaveTarget] = useState<SaveTarget>('auto')
 
   const counts = Object.fromEntries(
     ALL_FOLDERS.map((f) => [f, countFor(f as Parameters<typeof countFor>[0])])
@@ -21,22 +22,31 @@ export default function App() {
 
   const visible = filterMemos(
     folder as 'all' | 'important' | 'pinned' | Category,
-    period,
-    query,
+    activeQuery,
   )
+
+  const handleSave = (text: string) => {
+    addMemo(text, saveTarget === 'auto' ? undefined : saveTarget as Category)
+  }
+
+  const handleFolderSelect = (f: Folder) => {
+    setFolder(f)
+    setActiveQuery('')
+    setQuery('')
+  }
 
   return (
     <div className={styles.app}>
-      <Sidebar selected={folder} counts={counts} onSelect={setFolder} />
+      <Sidebar selected={folder} counts={counts} onSelect={handleFolderSelect} />
       <main className={styles.main}>
         <TopBar
           query={query}
-          period={period}
-          memos={visible}
+          saveTarget={saveTarget}
           onQuery={setQuery}
-          onPeriod={setPeriod}
+          onSearch={() => setActiveQuery(query)}
+          onSaveTarget={setSaveTarget}
         />
-        <MemoInput onSave={addMemo} />
+        <MemoInput saveTarget={saveTarget} onSave={handleSave} />
         <MemoList
           memos={visible}
           onToggleImportant={(id) => {

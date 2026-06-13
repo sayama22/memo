@@ -149,6 +149,16 @@
   color: var(--text-muted);
 }
 
+.hiddenInput {
+  display: none;
+}
+
+.sendIcon {
+  font-size: 1.2rem;
+  display: inline-block;
+  transform: rotate(45deg);
+}
+
 @media (max-width: 767px) {
   .inner {
     min-height: 120px;
